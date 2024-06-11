@@ -43,3 +43,9 @@ canvas {
 .again {
   display: none;
 }
+@media screen and (max-width: 600px) {
+  .game-info {
+    width: 100%;
+    margin: auto;
+  }
+}
