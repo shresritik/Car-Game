@@ -23,7 +23,7 @@ export class Rectangle implements IRectangle {
   };
   updateY = () => {
     if (this.center.y >= CANVAS_HEIGHT) {
-      this.center.y = 0;
+      this.center.y = -120;
     } else {
       this.center.y += SPEED;
     }
