@@ -39,3 +39,7 @@ canvas {
   margin-top: 10px;
   cursor: pointer;
 }
+.game,
+.again {
+  display: none;
+}
