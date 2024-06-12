@@ -1,14 +1,16 @@
-import { CANVAS_HEIGHT, CANVAS_WIDTH, SPEED } from "../constants/constants";
+import {
+  CANVAS_HEIGHT,
+  CANVAS_WIDTH,
+  SPEED,
+  foo,
+} from "../constants/constants";
 import { getRandomValue } from "../utils/utils";
 import { Car } from "./Car";
 import { Point } from "./Point";
 
-export var foo = { score: -2 };
-
 interface KeysMap {
   [key: string]: boolean;
 }
-
 export class Player extends Car {
   keys: KeysMap = {};
   verticalSpeed = 0.8;
@@ -19,6 +21,7 @@ export class Player extends Car {
     super(center, img);
     document.addEventListener("keydown", this.keyDownHandler);
     document.addEventListener("keyup", this.keyUpHandler);
+
     this.startSpeedIncreaseTimer();
   }
 

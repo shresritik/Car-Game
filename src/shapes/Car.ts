@@ -9,7 +9,7 @@ export class Car implements ICar {
   center: Point;
   img: HTMLImageElement;
   width: number = 50;
-  height: number = 100;
+  height: number = 90;
   constructor(center: Point, img: string) {
     this.center = center;
     this.img = new Image();
