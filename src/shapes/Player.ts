@@ -86,5 +86,6 @@ export class Player extends Car {
     this.verticalSpeed = 0.8;
     this.keys = {};
     this.stopSpeedIncreaseTimer();
+    this.startSpeedIncreaseTimer(); // Restart the timer when resetting
   };
 }

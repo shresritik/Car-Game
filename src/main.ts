@@ -133,7 +133,6 @@ function homeMenu(player: TPlayer) {
 // Game drawing loop
 function draw() {
   ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-  console.log(start, over);
   if (start && !over) {
     roadFunc();
     opponentFunc(player1);
@@ -195,6 +194,7 @@ function gameOver(player: TPlayer) {
       new Point(CANVAS_WIDTH / 2.2, CANVAS_HEIGHT / 1.2),
       car
     );
+    player1.reset();
     gameInfo.style.top = "-50%";
     foo.score = -2;
 
