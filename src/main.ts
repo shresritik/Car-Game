@@ -4,7 +4,7 @@ import { Point } from "./shapes/Point";
 import { Rectangle } from "./shapes/Rectangle";
 import car from "./assets/car.png";
 import car2 from "./assets/car3.png";
-import { Player, score } from "./shapes/Player";
+import { Player, foo } from "./shapes/Player";
 
 // Initialize canvas and context
 const canvas = document.getElementById("gameCanvas") as HTMLCanvasElement;
@@ -18,46 +18,59 @@ let car_y_offset: number = 0;
 let rectangle: Rectangle[] = [];
 let myReq: number = 0;
 type TPlayer = {
-  start: Boolean;
-  over: Boolean;
+  start: boolean;
+  over: boolean;
 };
 const player: TPlayer = { start: false, over: false };
 let over = false;
 let start = false;
 
 // Create road rectangles
-for (let i = 0; i < 2; i++) {
-  road_y_offset = 0;
-  for (let j = 0; j < 3; j++) {
-    const rect = new Rectangle(
-      new Point(
-        CANVAS_WIDTH / 3.3 + road_x_offset,
-        CANVAS_HEIGHT / 9 + road_y_offset
-      ),
-      30,
-      150,
-      "white"
-    );
-    rectangle.push(rect);
-    road_y_offset += 350;
+const createRoadRectangles = () => {
+  rectangle = [];
+  road_x_offset = 0;
+  for (let i = 0; i < 2; i++) {
+    road_y_offset = 0;
+    for (let j = 0; j < 3; j++) {
+      const rect = new Rectangle(
+        new Point(
+          CANVAS_WIDTH / 3.3 + road_x_offset,
+          CANVAS_HEIGHT / 9 + road_y_offset
+        ),
+        30,
+        150,
+        "white"
+      );
+      rectangle.push(rect);
+      road_y_offset += 350;
+    }
+    road_x_offset += 350;
   }
-  road_x_offset += 350;
-}
+};
 
 // Create opponents
-const opponent: Player[] = [];
+const createOpponents = () => {
+  car_x_offset = 0;
+  car_y_offset = 0;
+  const opponent: Player[] = [];
 
-for (let i = 0; i < 2; i++) {
-  for (let j = 0; j < 2; j++) {
-    const opp = new Player(
-      new Point(CANVAS_WIDTH / +car_x_offset, CANVAS_HEIGHT / 5 + car_y_offset),
-      car2
-    );
-    opponent.push(opp);
-    car_y_offset += 450;
+  for (let i = 0; i < 2; i++) {
+    for (let j = 0; j < 2; j++) {
+      const opp = new Player(
+        new Point(
+          CANVAS_WIDTH / 5 + car_x_offset,
+          CANVAS_HEIGHT / 5 + car_y_offset
+        ),
+        car2
+      );
+      opponent.push(opp);
+      car_y_offset += 450;
+    }
+    car_x_offset += 500;
   }
-  car_x_offset += 500;
-}
+  return opponent;
+};
+let opponent: Player[] = createOpponents();
 
 // Road drawing and updating function
 const roadFunc = () => {
@@ -89,24 +102,24 @@ canvas.width = CANVAS_WIDTH;
 canvas.height = CANVAS_HEIGHT;
 
 // Create player instance
-const player1 = new Player(
+let player1 = new Player(
   new Point(CANVAS_WIDTH / 2.2, CANVAS_HEIGHT / 1.2),
   car
 );
 
 // Setup home menu
-function homeMenu(player: any) {
+function homeMenu(player: TPlayer) {
   const gameInfo = document.querySelector(".game-info") as HTMLDivElement;
   const startBtn = document.querySelector(".btn") as HTMLButtonElement;
 
   if (startBtn) {
     startBtn.addEventListener("click", (e) => {
       e.preventDefault();
+      createRoadRectangles();
       gameInfo.style.top = "-50%";
       gameInfo.style.transition = "all 0.3s ease";
       player.start = true;
       start = true; // Update player start status inside the event listener
-      console.log("Game started home:", player.start);
     });
   }
 
@@ -120,7 +133,7 @@ function homeMenu(player: any) {
 // Game drawing loop
 function draw() {
   ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-  console.log(over, start);
+  console.log(start, over);
   if (start && !over) {
     roadFunc();
     opponentFunc(player1);
@@ -156,7 +169,7 @@ function gameOver(player: TPlayer) {
   // Display game over message and show the "play again" button
   gameInfo.style.top = "50%";
 
-  gameOverScreen.innerHTML = "Game Over <br/> Your Score is: " + score;
+  gameOverScreen.innerHTML = "Game Over <br/> Your Score is: " + foo.score;
   gameOverScreen.style.display = "block";
   // Hide the start button
   [...startBtn].forEach((el: any) => {
@@ -164,7 +177,6 @@ function gameOver(player: TPlayer) {
   });
   gameOverScreen.style.display = "block";
   againBtn.style.display = "block";
-
   againBtn.addEventListener("click", (e) => {
     e.preventDefault();
     // gameInfo.style.top = "-50%";
@@ -175,18 +187,26 @@ function gameOver(player: TPlayer) {
     player.over = false;
     over = false;
     start = true;
-    // Set to false to indicate the game is not over
-    // score = 0; // Reset the score
-    draw();
+
+    // Recreate the road rectangles and opponents
+    createRoadRectangles();
+    opponent = createOpponents();
+    player1 = new Player(
+      new Point(CANVAS_WIDTH / 2.2, CANVAS_HEIGHT / 1.2),
+      car
+    );
+    gameInfo.style.top = "-50%";
+    foo.score = -2;
 
     // Hide the game over screen
+    gameOverScreen.style.display = "none";
+    againBtn.style.display = "none";
+
+    // Restart the game
+    draw();
   });
-  start = true;
-  over = false;
 }
 
 // Initialize game
-
-// gameOver(player);
 draw();
 homeMenu(player);

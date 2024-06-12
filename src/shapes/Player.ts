@@ -3,7 +3,7 @@ import { getRandomValue } from "../utils/utils";
 import { Car } from "./Car";
 import { Point } from "./Point";
 
-export let score = -2;
+export var foo = { score: -2 };
 
 interface KeysMap {
   [key: string]: boolean;
@@ -34,7 +34,7 @@ export class Player extends Car {
     if (this.center.y >= CANVAS_HEIGHT + this.height) {
       this.center.y = -100;
       this.center.x = getRandomValue(5, CANVAS_WIDTH - this.width);
-      score += 1;
+      foo.score += 1;
     } else {
       this.center.y += this.verticalSpeed * SPEED;
     }
@@ -66,13 +66,12 @@ export class Player extends Car {
 
   updateScore = () => {
     const scoreVal = document.querySelector(".score") as HTMLElement;
-    scoreVal.innerText = "Score: " + score;
+    scoreVal.innerText = "Score: " + foo.score;
   };
 
   startSpeedIncreaseTimer = () => {
     this.speedIncreaseInterval = window.setInterval(() => {
       this.verticalSpeed += this.speedIncreaseAmount;
-      console.log("Speed increased to", this.verticalSpeed);
     }, 500);
   };
 
