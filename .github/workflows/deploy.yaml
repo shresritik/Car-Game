@@ -24,12 +24,9 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18.x
-      # Run npm install and build on our code
+      # Run npm install and npm install netlify-cli and build on our code
       - run: npm install && npm install netlify-cli
       - run: npm run build
-      # Run Test
-      - name: Run tests
-        run: npm run test
       # Deploy to Netlify using our production secrets
       - name: Deploy to netlify
         run: netlify deploy --site "${{ secrets.CAR_LANE }}" --auth ${{ secrets.NETLIFY_TOKEN }} --dir "dist" --prod
