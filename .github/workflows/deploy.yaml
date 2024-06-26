@@ -1,0 +1,35 @@
+# push.yml
+
+#  Name of workflow
+name: Push workflow
+
+# When workflow is triggered
+on:
+  push:
+    branches:
+      - master
+
+# Jobs to carry out
+jobs:
+  deploy:
+    # Operating system to run job on
+    runs-on: ubuntu-latest
+    # Steps in job
+    steps:
+      # Get code from repo
+      - name: Checkout code
+        uses: actions/checkout@v1
+      # Install NodeJS
+      - name: Use Node.js 18.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+      # Run npm install and build on our code
+      - run: npm install && npm install netlify-cli
+      - run: npm run build
+      # Run Test
+      - name: Run tests
+        run: npm run test
+      # Deploy to Netlify using our production secrets
+      - name: Deploy to netlify
+        run: netlify deploy --site "${{ secrets.CAR_LANE }}" --auth ${{ secrets.NETLIFY_TOKEN }} --dir "dist" --prod
